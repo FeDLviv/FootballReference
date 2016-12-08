@@ -146,6 +146,10 @@ namespace Football
         {
             Players.Add(new Player());
             list.SelectedIndex = list.Items.Count - 1;
+            if (!GroupMenuItem.IsChecked)
+            {
+                list.ScrollIntoView(list.Items[list.Items.Count - 1]);
+            }
             toggleBut.IsChecked = true;
             firstTxtBox.Focus();
         }

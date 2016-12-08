@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Football"
-        Title="Збірна Нідерландів" Width="700" TextOptions.TextFormattingMode="Display"> 
+        Title="Збірна Нідерландів" Width="750" TextOptions.TextFormattingMode="Display"> 
     <!-- DataContext="{Binding RelativeSource={RelativeSource Self}}" -->
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Save" Executed="Save_Executed" />
@@ -13,6 +13,15 @@
         <CommandBinding Command="local:SortPlayersCommand.Command" Executed="SortPlayers_Executed"></CommandBinding>
     </Window.CommandBindings>
     <Window.Resources>
+        <DataTemplate x:Key="MyTemplate">
+            <WrapPanel>
+                <Image Source="t-shirt.png" Width="42" />
+                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0"
+                                           Text="{Binding Path=FirstName}" />
+                <TextBlock VerticalAlignment="Center" Margin="5,0,20,0"
+                                           Text="{Binding Path=LastName, Converter={StaticResource StringUpperConverter}}" />
+            </WrapPanel>
+        </DataTemplate>
         <Style x:Key="MyDataGridRow" TargetType="DataGridRow">
             <EventSetter Event="MouseDoubleClick" Handler="DataGrid_RowDoubleClick"/>
         </Style>
@@ -29,21 +38,8 @@
                     </WrapPanel>
                 </Expander>
                 <ListBox Name="list" DockPanel.Dock="Left" Style="{StaticResource MyListBox}" SelectedIndex="0"
+                         ItemTemplate="{StaticResource MyTemplate}"
                          ItemsSource="{Binding Path=Players, Mode=TwoWay}" SelectionChanged="List_SelectionChanged">
-                    <ListBox.Background>
-                        <ImageBrush ImageSource="/Football;component/Images/T-shirt.png" Stretch="Uniform" TileMode="None" />
-                    </ListBox.Background>
-                    <ListBox.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="3" Background="Orange" >
-                                        <TextBlock Text="{Binding Path=Name, Converter={StaticResource EnumConverter}, StringFormat={}{0}и}" FontWeight="Bold" HorizontalAlignment="Center" />
-                                    </Border>
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListBox.GroupStyle>
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Command="local:DeletePlayerCommand.Command" />
@@ -63,15 +59,20 @@
                             <MenuItem Name="GroupMenuItem" Header="Згрупувати по позиціях" IsCheckable="True" Checked="GroupMenuItem_Checked" Unchecked="GroupMenuItem_Unchecked" />
                         </ContextMenu>
                     </ListBox.ContextMenu>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <WrapPanel>
-                                <TextBlock Text="{Binding FirstName}" />
-                                <TextBlock Text=" "/>
-                                <TextBlock Text="{Binding LastName}" />
-                            </WrapPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
+                    <ListBox.Background>
+                        <ImageBrush ImageSource="/Football;component/Images/T-shirt.png" Stretch="Uniform" TileMode="None" />
+                    </ListBox.Background>
+                    <ListBox.GroupStyle>
+                        <GroupStyle>
+                             <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="3" Background="Orange" >
+                                        <TextBlock Text="{Binding Path=Name, Converter={StaticResource EnumConverter}, StringFormat={}{0}и}" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    </Border>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListBox.GroupStyle>
                 </ListBox>
                 <GroupBox DockPanel.Dock="Right" Margin="5, 0" BorderThickness="2" 
                           BorderBrush="{StaticResource MyGradientBrush}" Header="Дані:">
@@ -138,7 +139,7 @@
                             <Button Grid.Row="9" Grid.Column="0" Style="{StaticResource MyButton}" 
                                 HorizontalAlignment="Left" ToolTip="Змінити фото футболіста" Content="Відкрити" 
                                 Visibility="{Binding ElementName=toggleBut, Path=IsChecked, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
-                                Command="ApplicationCommands.Open" />                         
+                                Command="ApplicationCommands.Open" /> 
                         </Grid>
                     </ScrollViewer>
                 </GroupBox>

@@ -82,6 +82,7 @@
     <Compile Include="DeletePlayerCommand.cs" />
     <Compile Include="EnumConverter.cs" />
     <Compile Include="SortPlayersCommand.cs" />
+    <Compile Include="StringUpperConverter.cs" />
     <Compile Include="VisibilityConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -157,6 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="football.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="t-shirt.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
