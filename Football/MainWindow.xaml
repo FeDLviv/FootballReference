@@ -62,11 +62,11 @@
                             </MenuItem>
                             <MenuItem Name="GroupMenuItem" Header="Згрупувати по позиціях" IsCheckable="True" Checked="GroupMenuItem_Checked" Unchecked="GroupMenuItem_Unchecked" />
                         </ContextMenu>
-                    </ListBox.ContextMenu>                    
+                    </ListBox.ContextMenu>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel>
-                                <TextBlock Text="{Binding FirstName}"/>
+                                <TextBlock Text="{Binding FirstName}" />
                                 <TextBlock Text=" "/>
                                 <TextBlock Text="{Binding LastName}" />
                             </WrapPanel>
@@ -123,7 +123,7 @@
                                      Text="{Binding Path=Club, TargetNullValue=невідомо, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
                             <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource MyLabel}" Content="матчі:" />
                             <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource MyTextBox}" 
-                                     Text="{Binding Path=Mathcs, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
+                                     Text="{Binding Path=Mathcs, Mode=TwoWay, NotifyOnSourceUpdated=True}"/>
                             <Label Grid.Row="6" Grid.Column="0" Style="{StaticResource MyLabel}" Content="голи:" />
                             <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource MyTextBox}" 
                                      Text="{Binding Path=Gools, Mode=TwoWay, NotifyOnSourceUpdated=True}" />

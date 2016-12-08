@@ -135,7 +135,7 @@ namespace Football
 
         private void DeletePlayer_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (MessageBox.Show("Видалити футболіста:\n" + list.SelectedItem + "?", "Видалення", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Видалити футболіста?\n" + list.SelectedItem, "Видалення", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 Player temp = list.SelectedItem as Player;
                 Players.Remove(temp);

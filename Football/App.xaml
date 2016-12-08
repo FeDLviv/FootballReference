@@ -70,6 +70,21 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="IsReadOnly" 
                     Value="{Binding ElementName=toggleBut, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center"  Padding="5,0" Foreground="Red" FontWeight="ExtraBold" Text="X" />
+                            <AdornedElementPlaceholder />
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         
         <Style x:Key="MyDatePicker" TargetType="DatePicker" BasedOn="{StaticResource MyBase}">

@@ -136,7 +136,7 @@ namespace Football
 
         public override string ToString()
         {
-            return FirstName + " " + LastName.ToUpper();
+            return FirstName + " " + LastName;
         } 
     }
 
