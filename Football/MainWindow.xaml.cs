@@ -172,10 +172,13 @@ namespace Football
 
         private void GroupMenuItem_Checked(object sender, RoutedEventArgs e)
         {
-            ICollectionView view = CollectionViewSource.GetDefaultView(list.ItemsSource);
-            view.SortDescriptions.Clear();
-            view.SortDescriptions.Add(new SortDescription("Position", ListSortDirection.Ascending));
-            view.GroupDescriptions.Add(new PropertyGroupDescription("Position"));
+            //ICollectionView view = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            //view.SortDescriptions.Clear();
+            //view.SortDescriptions.Add(new SortDescription("Position", ListSortDirection.Ascending));
+            //view.GroupDescriptions.Add(new PropertyGroupDescription("Position"));
+            list.Items.SortDescriptions.Clear();
+            list.Items.SortDescriptions.Add(new SortDescription("Position", ListSortDirection.Ascending));
+            list.Items.GroupDescriptions.Add(new PropertyGroupDescription("Position"));
         }
 
         private void GroupMenuItem_Unchecked(object sender, RoutedEventArgs e)

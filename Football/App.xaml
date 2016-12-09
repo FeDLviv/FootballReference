@@ -8,7 +8,9 @@
         <local:BoolConverter x:Key="BoolConverter" />
 
         <local:VisibilityConverter x:Key="VisibilityConverter" />
-        
+
+        <local:DateConverter x:Key="DateConverter" />
+
         <local:StringUpperConverter x:Key="StringUpperConverter" />
 
         <local:EnumConverter x:Key="EnumConverter"/>
@@ -23,13 +25,8 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
-        <!--LinearGradientBrush x:Key="MyGradientBrush" EndPoint="1,0.5" StartPoint="0,0.5">
-            <GradientStop Color="#FF1561EA" Offset="0" />
-            <GradientStop Color="#FFE47812" Offset="1" />
-        </LinearGradientBrush-->
         <LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0,0" EndPoint="1,1" >
             <GradientStop Color="Red" Offset="0" />
-            <!--GradientStop Color="White" Offset="0.1" /-->
             <GradientStop Color="Blue" Offset="1" />
         </LinearGradientBrush>
 
@@ -57,11 +54,6 @@
         
         <Style x:Key="MyToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource MyBase}">
             <Setter Property="Padding" Value="5" />
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="Red" />
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
         <Style x:Key="MyLabel" TargetType="Label" BasedOn="{StaticResource MyBase}">
@@ -103,8 +95,10 @@
         <!--ColumnWidth="1*"-->
         <Style x:Key="MyDataGrid" TargetType="DataGrid">
             <Setter Property="AutoGenerateColumns" Value="False" />
-            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="CanUserAddRows" Value="True" />
+            <Setter Property="CanUserDeleteRows" Value="True" />
             <Setter Property="RowDetailsVisibilityMode" Value="Collapsed" />
+            <Setter Property="AreRowDetailsFrozen" Value="True" />
             <Setter Property="IsReadOnly" Value="True" />
         </Style>
 

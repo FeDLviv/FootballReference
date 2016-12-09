@@ -29,6 +29,40 @@
     <TabControl>
         <TabItem Header="Футболісти">
             <DockPanel>
+                <StatusBar DockPanel.Dock="Bottom">
+                    <TextBlock Text="{Binding Path=Players.Count, StringFormat=Кількість гравців: {0}}" /> 
+                    <Separator />
+                    <TextBlock FontWeight="Bold" FontStyle="Italic" Width="{Binding Path=Width}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=toggleBut, Path=IsChecked}" Value="True">
+                                        <Setter Property="Text" Value="   РЕДАГУВАННЯ!!!" />
+                                        <Setter Property="Background" Value="OrangeRed" />
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                     From="0.2" To="0.8" Duration="0:0:2" 
+                                                                     AutoReverse="True"
+                                                                     RepeatBehavior="Forever" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard FillBehavior="Stop">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                     To="1" Duration="0:0:1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StatusBar>
                 <Expander DockPanel.Dock="Bottom" Header="Редагування:">
                     <WrapPanel>
                         <ToggleButton Name="toggleBut"  Style="{StaticResource MyToggleButton}"
@@ -130,7 +164,7 @@
                                      Text="{Binding Path=Gools, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
                             <Label Grid.Row="7" Grid.Column="0" Style="{StaticResource MyLabel}" Content="останні зміни:" />
                             <TextBox Name="lastUpdTxtBox" Grid.Row="7" Grid.Column="1" Style="{StaticResource MyTextBox}" 
-                                     Text="{Binding Path=LastEdit, StringFormat='{}{0:dd.MM.yyyy   HH:mm}', Mode=TwoWay}" />
+                                     Text="{Binding Path=LastEdit, Converter={StaticResource DateConverter}, Mode=TwoWay}" />
                             <Border Name="border" Grid.Row="8" Grid.Column="0" Style="{StaticResource MyBorder}" 
                                     BorderBrush="{StaticResource MyGradientBrush}">
                                 <Image Name="image" Width="100" Stretch="UniformToFill" 
@@ -146,24 +180,57 @@
             </DockPanel>
         </TabItem>
             <TabItem Header="Таблиця">
-            <DataGrid Style="{StaticResource MyDataGrid}" RowStyle="{StaticResource MyDataGridRow}"
-                      ItemsSource="{Binding Path=Players}">
+            <DataGrid Name="dataGrid"  Style="{StaticResource MyDataGrid}" RowStyle="{StaticResource MyDataGridRow}"
+                      ItemsSource="{Binding Path=Players}" AlternationCount="2" AlternatingRowBackground="Azure">
+                <DataGrid.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="3" Background="Orange" >
+                                    <TextBlock Text="{Binding Path=Name, Converter={StaticResource EnumConverter}, StringFormat={}{0}и}" FontWeight="Bold" HorizontalAlignment="Center" />
+                                </Border>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="прізвище" FontWeight="Bold" ElementStyle="{StaticResource MyTextBlock}"
                                         Binding="{Binding LastName, TargetNullValue=невідомо, Mode=TwoWay}" >
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="ім'я" ElementStyle="{StaticResource MyTextBlock}"
                                         Binding="{Binding FirstName, TargetNullValue=невідомо, Mode=TwoWay}" />
-                    <DataGridTemplateColumn Header="день народження">
+                    <DataGridTemplateColumn Header="день народження" SortMemberPath="Birthday" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Birthday, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <DatePicker DisplayDateStart="1.1.1980" DisplayDateEnd="{x:Static sys:DateTime.Now}" 
                                             SelectedDate="{Binding Path=Birthday, Mode=TwoWay}" />
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridComboBoxColumn Header="позиція" ItemsSource="{Binding Source={StaticResource MyEnum}}"
-                                            SelectedValueBinding="{Binding Path=Position, Mode=TwoWay}" />
+                    <DataGridTemplateColumn Header="позиція" SortMemberPath="Position" CanUserSort="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Position, Converter={StaticResource EnumConverter}, Mode=OneWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource MyEnum}, Mode=OneWay}"
+                                  SelectedItem="{Binding Path=Position, Mode=TwoWay}" >
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="клуб" ElementStyle="{StaticResource MyTextBlock}"
                                         Binding="{Binding Club, TargetNullValue=невідомо, Mode=TwoWay}" />
                     <DataGridTextColumn Header="матчі" ElementStyle="{StaticResource MyTextBlock}"
@@ -171,11 +238,11 @@
                     <DataGridTextColumn Header="голи" ElementStyle="{StaticResource MyTextBlock}"
                                         Binding="{Binding Gools, Mode=TwoWay}" />
                     <DataGridTextColumn Header="останні зміни" ElementStyle="{StaticResource MyTextBlock}"
-                                        Binding="{Binding LastEdit, StringFormat='{}{0:dd.MM.yyyy   HH:mm}', Mode=TwoWay}" />
+                                        Binding="{Binding LastEdit, Converter={StaticResource DateConverter}, Mode=TwoWay}" />
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
-                        <Image Height="160" Width="100" HorizontalAlignment="Left" Stretch="UniformToFill"
+                        <Image Height="160" Width="100" HorizontalAlignment="Left" Margin="5" Stretch="UniformToFill"
                                Source="{Binding Path=ImageByteArray, Converter={StaticResource ImageSourceConverter}, Mode=OneWay}" />
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
