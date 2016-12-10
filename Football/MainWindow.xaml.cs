@@ -94,6 +94,7 @@ namespace Football
                     sr.WriteObject(xmlw, Players);
                 }
             }
+            toggleBut.IsChecked = false;
             MessageBox.Show("Всі дані записані", "Збереження", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -144,6 +145,7 @@ namespace Football
 
         private void AddPlayer_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            filterTxtBox.Text = string.Empty;
             Players.Add(new Player());
             list.SelectedIndex = list.Items.Count - 1;
             if (!GroupMenuItem.IsChecked)
@@ -158,7 +160,7 @@ namespace Football
         private void SortPlayers_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string nameProperty = e.Parameter as string;
-            ICollectionView view = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            ICollectionView view = CollectionViewSource.GetDefaultView(Players);
             view.SortDescriptions.Clear();
             if (nameProperty != null)
             {
@@ -172,19 +174,44 @@ namespace Football
 
         private void GroupMenuItem_Checked(object sender, RoutedEventArgs e)
         {
-            //ICollectionView view = CollectionViewSource.GetDefaultView(list.ItemsSource);
-            //view.SortDescriptions.Clear();
-            //view.SortDescriptions.Add(new SortDescription("Position", ListSortDirection.Ascending));
-            //view.GroupDescriptions.Add(new PropertyGroupDescription("Position"));
-            list.Items.SortDescriptions.Clear();
-            list.Items.SortDescriptions.Add(new SortDescription("Position", ListSortDirection.Ascending));
-            list.Items.GroupDescriptions.Add(new PropertyGroupDescription("Position"));
+            ICollectionView view = CollectionViewSource.GetDefaultView(Players);
+            view.SortDescriptions.Clear();
+            view.SortDescriptions.Add(new SortDescription("Position", ListSortDirection.Ascending));
+            view.GroupDescriptions.Add(new PropertyGroupDescription("Position", new EnumConverter(true)));
         }
 
         private void GroupMenuItem_Unchecked(object sender, RoutedEventArgs e)
         {
-            ICollectionView view = CollectionViewSource.GetDefaultView(list.ItemsSource);
+            ICollectionView view = CollectionViewSource.GetDefaultView(Players);
             view.GroupDescriptions.Clear();
+        }
+
+        private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox temp = sender as TextBox;
+            if (temp != null)
+            {
+                ICollectionView view = CollectionViewSource.GetDefaultView(Players);
+                if (temp.Text == string.Empty)
+                {
+                    view.Filter = null;
+                }
+                else 
+                {
+                    view.Filter = (o) =>
+                    {
+                        Player player = o as Player;
+                        if (player.LastName != null && player.LastName.StartsWith(temp.Text, true, null))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    };
+                }
+            }
         }
     }
 }

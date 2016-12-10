@@ -19,7 +19,7 @@ namespace Football
         static AddPlayerCommand()
         {
             //InputGestureCollection inputs = new InputGestureCollection();
-            //inputs.Add(new KeyGesture(Key.A, ModifierKeys.Control, "Ctrl + A"));
+            //inputs.Add(new KeyGesture(Key.L, ModifierKeys.Control, "Ctrl + L"));
             command = new RoutedUICommand("Додати футболіста", "AddPlayer", typeof(AddPlayerCommand));
         }
     }

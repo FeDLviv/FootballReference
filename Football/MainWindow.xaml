@@ -26,227 +26,245 @@
             <EventSetter Event="MouseDoubleClick" Handler="DataGrid_RowDoubleClick"/>
         </Style>
     </Window.Resources>
-    <TabControl>
-        <TabItem Header="Футболісти">
-            <DockPanel>
-                <StatusBar DockPanel.Dock="Bottom">
-                    <TextBlock Text="{Binding Path=Players.Count, StringFormat=Кількість гравців: {0}}" /> 
-                    <Separator />
-                    <TextBlock FontWeight="Bold" FontStyle="Italic" Width="{Binding Path=Width}">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=toggleBut, Path=IsChecked}" Value="True">
-                                        <Setter Property="Text" Value="   РЕДАГУВАННЯ!!!" />
-                                        <Setter Property="Background" Value="OrangeRed" />
-                                        <DataTrigger.EnterActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="{Binding Path=Players.Count, StringFormat=Кількість гравців: {0}}" />
+            <Separator />
+            <TextBlock FontWeight="Bold" FontStyle="Italic" Width="{Binding Path=ActualWidth}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=toggleBut, Path=IsChecked}" Value="True">
+                                <Setter Property="Text" Value="   РЕДАГУВАННЯ!!!" />
+                                <Setter Property="Background" Value="OrangeRed" />
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                                                      From="0.2" To="0.8" Duration="0:0:2" 
                                                                      AutoReverse="True"
                                                                      RepeatBehavior="Forever" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.EnterActions>
-                                        <DataTrigger.ExitActions>
-                                            <BeginStoryboard>
-                                                <Storyboard FillBehavior="Stop">
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard FillBehavior="Stop">
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                                                      To="1" Duration="0:0:1" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.ExitActions>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                </StatusBar>
-                <Expander DockPanel.Dock="Bottom" Header="Редагування:">
-                    <WrapPanel>
-                        <ToggleButton Name="toggleBut"  Style="{StaticResource MyToggleButton}"
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StatusBar>
+        <TabControl TabStripPlacement="Left" ItemContainerStyle="{StaticResource MyTabItem}">
+            <TabItem Header="Футболісти">
+                <DockPanel>
+                    <Expander DockPanel.Dock="Bottom" Header="Редагування:">
+                        <WrapPanel>
+                            <ToggleButton Name="toggleBut"  Style="{StaticResource MyToggleButton}"
                                       ToolTip="Дозвіл на редагування даних" Content="Редагувати" />
-                        <Button Style="{StaticResource MyButton}" ToolTip="Сереалізація списку футболістів" 
+                            <Button Style="{StaticResource MyButton}" ToolTip="Сереалізація списку футболістів" 
                                 Content="Зберегти" Command="ApplicationCommands.Save" />
-                    </WrapPanel>
-                </Expander>
-                <ListBox Name="list" DockPanel.Dock="Left" Style="{StaticResource MyListBox}" SelectedIndex="0"
+                        </WrapPanel>
+                    </Expander>
+                    <ListBox Name="list" DockPanel.Dock="Left" Style="{StaticResource MyListBox}" SelectedIndex="0"
                          ItemTemplate="{StaticResource MyTemplate}"
                          ItemsSource="{Binding Path=Players, Mode=TwoWay}" SelectionChanged="List_SelectionChanged">
-                    <ListBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="local:DeletePlayerCommand.Command" />
-                            <MenuItem Command="local:AddPlayerCommand.Command" />
-                            <Separator />
-                            <MenuItem Header="Сортування...">
-                                <MenuItem Header="по прізвищу" Command="local:SortPlayersCommand.Command" CommandParameter="LastName" />
-                                <MenuItem Header="по імені" Command="local:SortPlayersCommand.Command" CommandParameter="FirstName" />
-                                <MenuItem Header="по позиції" Command="local:SortPlayersCommand.Command" CommandParameter="Position" />
-                                <MenuItem Header="по віку" Command="local:SortPlayersCommand.Command" CommandParameter="Birthday" />
-                                <MenuItem Header="по матчах" Command="local:SortPlayersCommand.Command" CommandParameter="Mathcs" />
-                                <MenuItem Header="по голах" Command="local:SortPlayersCommand.Command" CommandParameter="Gools" />
-                                <MenuItem Header="по часу редагування" Command="local:SortPlayersCommand.Command" CommandParameter="LastEdit" />
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="local:DeletePlayerCommand.Command" />
+                                <MenuItem Command="local:AddPlayerCommand.Command" />
                                 <Separator />
-                                <MenuItem Header="відмінити" Command="local:SortPlayersCommand.Command" />
-                            </MenuItem>
-                            <MenuItem Name="GroupMenuItem" Header="Згрупувати по позиціях" IsCheckable="True" Checked="GroupMenuItem_Checked" Unchecked="GroupMenuItem_Unchecked" />
-                        </ContextMenu>
-                    </ListBox.ContextMenu>
-                    <ListBox.Background>
-                        <ImageBrush ImageSource="/Football;component/Images/T-shirt.png" Stretch="Uniform" TileMode="None" />
-                    </ListBox.Background>
-                    <ListBox.GroupStyle>
-                        <GroupStyle>
-                             <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="3" Background="Orange" >
-                                        <TextBlock Text="{Binding Path=Name, Converter={StaticResource EnumConverter}, StringFormat={}{0}и}" FontWeight="Bold" HorizontalAlignment="Center" />
-                                    </Border>
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListBox.GroupStyle>
-                </ListBox>
-                <GroupBox DockPanel.Dock="Right" Margin="5, 0" BorderThickness="2" 
+                                <MenuItem Header="Сортування...">
+                                    <MenuItem Header="по прізвищу" Command="local:SortPlayersCommand.Command" CommandParameter="LastName" />
+                                    <MenuItem Header="по імені" Command="local:SortPlayersCommand.Command" CommandParameter="FirstName" />
+                                    <MenuItem Header="по позиції" Command="local:SortPlayersCommand.Command" CommandParameter="Position" />
+                                    <MenuItem Header="по віку" Command="local:SortPlayersCommand.Command" CommandParameter="Birthday" />
+                                    <MenuItem Header="по матчах" Command="local:SortPlayersCommand.Command" CommandParameter="Mathcs" />
+                                    <MenuItem Header="по голах" Command="local:SortPlayersCommand.Command" CommandParameter="Gools" />
+                                    <MenuItem Header="по часу редагування" Command="local:SortPlayersCommand.Command" CommandParameter="LastEdit" />
+                                    <Separator />
+                                    <MenuItem Header="відмінити" Command="local:SortPlayersCommand.Command" />
+                                </MenuItem>
+                                <MenuItem Name="GroupMenuItem" Header="Згрупувати по позиціях" IsCheckable="True" Checked="GroupMenuItem_Checked" Unchecked="GroupMenuItem_Unchecked" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                        <ListBox.Background>
+                            <ImageBrush ImageSource="/Football;component/Images/T-shirt.png" Stretch="Uniform" TileMode="None" />
+                        </ListBox.Background>
+                        <ListBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="3" Background="Orange" >
+                                            <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" HorizontalAlignment="Center" />
+                                        </Border>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </ListBox.GroupStyle>
+                    </ListBox>
+                    <GroupBox DockPanel.Dock="Right" Margin="5, 0" BorderThickness="2" 
                           BorderBrush="{StaticResource MyGradientBrush}" Header="Дані:">
-                    <GroupBox.Background>
-                        <ImageBrush ImageSource="/Football;component/Images/Netherlands.png" Stretch="Uniform" TileMode="None" />
-                    </GroupBox.Background>
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                        <Grid DataContext="{Binding ElementName=list, Path=SelectedItem}" 
+                        <GroupBox.Background>
+                            <ImageBrush ImageSource="/Football;component/Images/Netherlands.png" Stretch="Uniform" TileMode="None" />
+                        </GroupBox.Background>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <Grid DataContext="{Binding ElementName=list, Path=SelectedItem}" 
                               Binding.SourceUpdated="List_SourceUpdated">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="160" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource MyLabel}" Content="прізвище:" />
-                            <TextBox Name="firstTxtBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource MyTextBox}" 
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="160" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource MyLabel}" Content="прізвище:" />
+                                <TextBox Name="firstTxtBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource MyTextBox}" 
                                      Text="{Binding Path=LastName, TargetNullValue=невідомо, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
-                            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource MyLabel}" Content="ім'я:" />
-                            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource MyTextBox}" 
+                                <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource MyLabel}" Content="ім'я:" />
+                                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource MyTextBox}" 
                                      Text="{Binding Path=FirstName, TargetNullValue=невідомо, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
-                            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource MyLabel}" Content="день народження:" />
-                            <DatePicker Grid.Row="2" Grid.Column="1" Style="{StaticResource MyDatePicker}" 
+                                <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource MyLabel}" Content="день народження:" />
+                                <DatePicker Grid.Row="2" Grid.Column="1" Style="{StaticResource MyDatePicker}" 
                                     IsHitTestVisible="{Binding ElementName=toggleBut, Path=IsChecked, Mode=OneWay}" 
                                     SelectedDate="{Binding Path=Birthday, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
-                            <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource MyLabel}" Content="позиція:" />
-                            <ComboBox Name="comboBox" Grid.Row="3" Grid.Column="1" Style="{StaticResource MyBase}" 
+                                <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource MyLabel}" Content="позиція:" />
+                                <ComboBox Name="comboBox" Grid.Row="3" Grid.Column="1" Style="{StaticResource MyBase}" 
                                   IsHitTestVisible="{Binding ElementName=toggleBut, Path=IsChecked, Mode=OneWay}"
                                   ItemsSource="{Binding Source={StaticResource MyEnum}, Mode=OneWay}"
                                   SelectedItem="{Binding Path=Position, Mode=TwoWay, NotifyOnSourceUpdated=True}" >
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource MyLabel}" Content="клуб:" />
-                            <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource MyTextBox}" 
-                                     Text="{Binding Path=Club, TargetNullValue=невідомо, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
-                            <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource MyLabel}" Content="матчі:" />
-                            <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource MyTextBox}" 
-                                     Text="{Binding Path=Mathcs, Mode=TwoWay, NotifyOnSourceUpdated=True}"/>
-                            <Label Grid.Row="6" Grid.Column="0" Style="{StaticResource MyLabel}" Content="голи:" />
-                            <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource MyTextBox}" 
-                                     Text="{Binding Path=Gools, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
-                            <Label Grid.Row="7" Grid.Column="0" Style="{StaticResource MyLabel}" Content="останні зміни:" />
-                            <TextBox Name="lastUpdTxtBox" Grid.Row="7" Grid.Column="1" Style="{StaticResource MyTextBox}" 
-                                     Text="{Binding Path=LastEdit, Converter={StaticResource DateConverter}, Mode=TwoWay}" />
-                            <Border Name="border" Grid.Row="8" Grid.Column="0" Style="{StaticResource MyBorder}" 
-                                    BorderBrush="{StaticResource MyGradientBrush}">
-                                <Image Name="image" Width="100" Stretch="UniformToFill" 
-                                       Source="{Binding Path=ImageByteArray, Converter={StaticResource ImageSourceConverter}, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
-                            </Border>
-                            <Button Grid.Row="9" Grid.Column="0" Style="{StaticResource MyButton}" 
-                                HorizontalAlignment="Left" ToolTip="Змінити фото футболіста" Content="Відкрити" 
-                                Visibility="{Binding ElementName=toggleBut, Path=IsChecked, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
-                                Command="ApplicationCommands.Open" /> 
-                        </Grid>
-                    </ScrollViewer>
-                </GroupBox>
-            </DockPanel>
-        </TabItem>
-            <TabItem Header="Таблиця">
-            <DataGrid Name="dataGrid"  Style="{StaticResource MyDataGrid}" RowStyle="{StaticResource MyDataGridRow}"
-                      ItemsSource="{Binding Path=Players}" AlternationCount="2" AlternatingRowBackground="Azure">
-                <DataGrid.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="3" Background="Orange" >
-                                    <TextBlock Text="{Binding Path=Name, Converter={StaticResource EnumConverter}, StringFormat={}{0}и}" FontWeight="Bold" HorizontalAlignment="Center" />
-                                </Border>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
-                </DataGrid.GroupStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="прізвище" FontWeight="Bold" ElementStyle="{StaticResource MyTextBlock}"
-                                        Binding="{Binding LastName, TargetNullValue=невідомо, Mode=TwoWay}" >
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="ім'я" ElementStyle="{StaticResource MyTextBlock}"
-                                        Binding="{Binding FirstName, TargetNullValue=невідомо, Mode=TwoWay}" />
-                    <DataGridTemplateColumn Header="день народження" SortMemberPath="Birthday" CanUserSort="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Birthday, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <DatePicker DisplayDateStart="1.1.1980" DisplayDateEnd="{x:Static sys:DateTime.Now}" 
-                                            SelectedDate="{Binding Path=Birthday, Mode=TwoWay}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="позиція" SortMemberPath="Position" CanUserSort="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Position, Converter={StaticResource EnumConverter}, Mode=OneWay}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding Source={StaticResource MyEnum}, Mode=OneWay}"
-                                  SelectedItem="{Binding Path=Position, Mode=TwoWay}" >
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
+                                <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource MyLabel}" Content="клуб:" />
+                                <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource MyTextBox}" 
+                                     Text="{Binding Path=Club, TargetNullValue=невідомо, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
+                                <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource MyLabel}" Content="матчі:" />
+                                <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource MyTextBox}" 
+                                     Text="{Binding Path=Mathcs, Mode=TwoWay, NotifyOnSourceUpdated=True}"/>
+                                <Label Grid.Row="6" Grid.Column="0" Style="{StaticResource MyLabel}" Content="голи:" />
+                                <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource MyTextBox}" 
+                                     Text="{Binding Path=Gools, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
+                                <Label Grid.Row="7" Grid.Column="0" Style="{StaticResource MyLabel}" Content="останні зміни:" />
+                                <TextBox Name="lastUpdTxtBox" Grid.Row="7" Grid.Column="1" Style="{StaticResource MyTextBox}" 
+                                     Text="{Binding Path=LastEdit, Converter={StaticResource DateConverter}, Mode=TwoWay}" />
+                                <Border Name="border" Grid.Row="8" Grid.Column="0" Style="{StaticResource MyBorder}" 
+                                    BorderBrush="{StaticResource MyGradientBrush}">
+                                    <Image Name="image" Width="100" Stretch="UniformToFill" 
+                                       Source="{Binding Path=ImageByteArray, Converter={StaticResource ImageSourceConverter}, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
+                                </Border>
+                                <Button Grid.Row="9" Grid.Column="0" Style="{StaticResource MyButton}" 
+                                HorizontalAlignment="Left" ToolTip="Змінити фото футболіста" Content="Відкрити" 
+                                Visibility="{Binding ElementName=toggleBut, Path=IsChecked, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                                Command="ApplicationCommands.Open" />
+                            </Grid>
+                        </ScrollViewer>
+                    </GroupBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Таблиця">
+                <DockPanel>
+                    <ToolBar DockPanel.Dock="Bottom" ToolBarTray.IsLocked="True">
+                        <TextBox Name="filterTxtBox" Width="150" TextChanged="FilterTextBox_TextChanged" >
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                            <Setter Property="Background" Value="{StaticResource MyVisualrBrush}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                        <Separator />
+                    </ToolBar>
+                    <DataGrid Name="dataGrid" Style="{StaticResource MyDataGrid}" RowStyle="{StaticResource MyDataGridRow}"
+                          ItemsSource="{Binding Path=Players}" AlternationCount="2" AlternatingRowBackground="Azure">
+                        <DataGrid.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="3" Background="Orange" >
+                                            <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" HorizontalAlignment="Center" />
+                                        </Border>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </DataGrid.GroupStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="прізвище" FontWeight="Bold" ElementStyle="{StaticResource MyTextBlock}"
+                                             Binding="{Binding LastName, TargetNullValue=невідомо, Mode=TwoWay}" >
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="ім'я" ElementStyle="{StaticResource MyTextBlock}"
+                                            Binding="{Binding FirstName, TargetNullValue=невідомо, Mode=TwoWay}" />
+                            <DataGridTemplateColumn Header="день народження" SortMemberPath="Birthday" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Birthday, Mode=OneWay, StringFormat={}{0:dd.MM.yyyy}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <DatePicker DisplayDateStart="1.1.1980" DisplayDateEnd="{x:Static sys:DateTime.Now}" 
+                                                SelectedDate="{Binding Path=Birthday, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="позиція" SortMemberPath="Position" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Position, Converter={StaticResource EnumConverter}, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource MyEnum}, Mode=OneWay}"
+                                              SelectedItem="{Binding Path=Position, Mode=TwoWay}" >
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Converter={StaticResource EnumConverter}}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="клуб" ElementStyle="{StaticResource MyTextBlock}"
+                                            Binding="{Binding Club, TargetNullValue=невідомо, Mode=TwoWay}" />
+                            <DataGridTextColumn Header="матчі" ElementStyle="{StaticResource MyTextBlock}"
+                                            Binding="{Binding Mathcs, Mode=TwoWay}" />
+                            <DataGridTextColumn Header="голи" ElementStyle="{StaticResource MyTextBlock}"
+                                            Binding="{Binding Gools, Mode=TwoWay}" />
+                            <DataGridTextColumn Header="останні зміни" ElementStyle="{StaticResource MyTextBlock}"
+                                            Binding="{Binding LastEdit, Converter={StaticResource DateConverter}, Mode=TwoWay}" />
+                        </DataGrid.Columns>
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <Image Height="160" Width="100" HorizontalAlignment="Left" Margin="5" Stretch="UniformToFill"
+                                   Source="{Binding Path=ImageByteArray, Converter={StaticResource ImageSourceConverter}, Mode=OneWay}" />
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="клуб" ElementStyle="{StaticResource MyTextBlock}"
-                                        Binding="{Binding Club, TargetNullValue=невідомо, Mode=TwoWay}" />
-                    <DataGridTextColumn Header="матчі" ElementStyle="{StaticResource MyTextBlock}"
-                                        Binding="{Binding Mathcs, Mode=TwoWay}" />
-                    <DataGridTextColumn Header="голи" ElementStyle="{StaticResource MyTextBlock}"
-                                        Binding="{Binding Gools, Mode=TwoWay}" />
-                    <DataGridTextColumn Header="останні зміни" ElementStyle="{StaticResource MyTextBlock}"
-                                        Binding="{Binding LastEdit, Converter={StaticResource DateConverter}, Mode=TwoWay}" />
-                </DataGrid.Columns>
-                <DataGrid.RowDetailsTemplate>
-                    <DataTemplate>
-                        <Image Height="160" Width="100" HorizontalAlignment="Left" Margin="5" Stretch="UniformToFill"
-                               Source="{Binding Path=ImageByteArray, Converter={StaticResource ImageSourceConverter}, Mode=OneWay}" />
-                    </DataTemplate>
-                </DataGrid.RowDetailsTemplate>
-            </DataGrid>
-        </TabItem>
-    </TabControl>
+                        </DataGrid.RowDetailsTemplate>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

@@ -13,6 +13,19 @@ namespace Football
     [ValueConversion(typeof(Enum), typeof(string))]
     class EnumConverter:IValueConverter
     {
+
+        private bool items = false;
+
+        public EnumConverter()
+        {
+
+        }
+
+        public EnumConverter(bool items)
+        {
+            this.items = items;
+        }
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null || value.ToString() == string.Empty)
@@ -29,7 +42,15 @@ namespace Football
                     object[] atr = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
                     if (atr != null && atr.Length > 0)
                     {
-                        return ((DescriptionAttribute)atr[0]).Description;
+                        string result = ((DescriptionAttribute)atr[0]).Description;
+                        if (items)
+                        {
+                            return result.ToUpper() + "И";
+                        }
+                        else
+                        {
+                            return result;
+                        }
                     }
                 }
                 return temp.ToString();
